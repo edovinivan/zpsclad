@@ -26,7 +26,7 @@ public class FWorker extends javax.swing.JDialog {
     Worker worker = new Worker();
     
     public void setWorker(Worker w){
-        worker = w;
+        worker = w;   
     }
     
     
