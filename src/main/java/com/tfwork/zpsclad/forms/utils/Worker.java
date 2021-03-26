@@ -15,21 +15,27 @@ import lombok.Data;
 @Data
 public class Worker {
        
-    //код
+    /**
+     * код
+     */ 
     int kod;
-    //фио
+    /**
+     * фио
+     */
     String name;
     
-    //кол-во стандартов из hope для контролера
+    /**
+     * кол-во стандартов из hope для контролера      
+     */
     int controlor_standart_hope;
     
-    //кол-во позиций из hope для контролера
+    /**кол-во позиций из hope для контролера*/
     int controlor_pozic_hope;
     
-    //кол-во стандартов из hope для наборщика    
+    /**кол-во стандартов из hope для наборщика    */
     int picker_standart_hope;
     
-    //кол-во позиций из hope для наборщика
+    /**кол-во позиций из hope для наборщика*/
     int picker_pozic_hope;    
     
     int controlor_standart_smart;
@@ -37,41 +43,43 @@ public class Worker {
     int picker_standart_smart;
     int picker_pozic_smart;
     
-    // дней отработано
+    /** дней отработано*/
     int work_day;
     
-    //часов разгрузки
+    /**часов разгрузки*/
     int hour_hand;
     
-    //стаж
+    /**стаж*/
     int stag;
     
-    //премия
+    /**премия*/
     int prize;
     
-    //за комнаты
+    /**за комнаты*/
     int room;
     
-    //штраф
+    /**штраф*/
     int fine;
     
-    //ошибки
+    /**ошибки*/
     int error;
     
-    //оклад
+    /**оклад*/
     int salary;
     
-    // тип оплаты сотрудника
+    /** тип оплаты сотрудника
     // 1 - оклад
     // 2 - наборщик
-    // 3 - контролер
+    // 3 - контролер*/
     int tip_oplata;    
     
-    // дата начала работы
+    /** дата начала работы месяц*/
     int start_mont;
+    
+    /** дата начала работы год*/
     int start_yar;
     
-    //удален
+    /**удален*/
     int del;    
     
 }

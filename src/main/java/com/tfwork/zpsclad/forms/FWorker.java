@@ -6,6 +6,7 @@
 package com.tfwork.zpsclad.forms;
 
 import com.tfwork.zpsclad.forms.utils.Worker;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,14 +23,50 @@ public class FWorker extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
+            
+    private Worker worker;// = new Worker();
+    boolean result = false;
     
-    Worker worker = new Worker();
     
-    public void setWorker(Worker w){
-        worker = w;   
+    public boolean getResult(){
+        return result;
     }
     
+    /**
+     * Записать заратника для редактирования
+     * @param w 
+     */
+    public void setWorker(Worker w){
+        worker = w; 
+        jTextField1.setText(String.valueOf(worker.getKod()));
+        jTextField2.setText(worker.getName());
+        jTextField3.setText(String.valueOf(worker.getSalary()));
+        jTextField4.setText(String.valueOf(worker.getPrize()));
+        jTextField5.setText(String.valueOf(worker.getRoom()));
+        jTextField6.setText(String.valueOf(worker.getFine()));
+        jTextField7.setText(String.valueOf(worker.getError()));
+        jComboBox1.setSelectedIndex(worker.getTip_oplata());
+        jComboBox2.setSelectedIndex(worker.getStart_mont());
+        jSpinner1.setValue(worker.getStart_yar());
+        jSpinner2.setValue(worker.getWork_day());     
+        jCheckBox1.setSelected(worker.getDel()==1);        
+    }
     
+    /**
+     * Создать нового пользователя
+     */
+    public void createNewWorker() {
+        worker = new Worker();
+        
+    }
+    
+    /**
+     * Получить работника
+     * @return 
+     */
+    public Worker getWorker() {
+        return worker;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,6 +104,11 @@ public class FWorker extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Работник");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Код");
@@ -99,7 +141,7 @@ public class FWorker extends javax.swing.JDialog {
         jLabel10.setText("Ошибки");
 
         jTextField1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jTextField1.setText("0");
+        jTextField1.setText("-1");
 
         jTextField2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
@@ -140,6 +182,11 @@ public class FWorker extends javax.swing.JDialog {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Сохранить");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton2.setText("Отмена");
@@ -256,6 +303,43 @@ public class FWorker extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        worker.setKod(Integer.parseInt(jTextField1.getText()));
+        if(worker.getKod()<0){
+            JOptionPane.showMessageDialog(null, "Введите код.");
+            return;
+        }
+        
+        worker.setName(jTextField2.getText());
+        
+        if(worker.getName().length()<5){
+            JOptionPane.showMessageDialog(null, "Введите ФИО");
+            return;
+        }
+        
+        worker.setSalary(Integer.parseInt(jTextField3.getText()));
+        worker.setPrize(Integer.parseInt(jTextField4.getText()));
+        worker.setRoom(Integer.parseInt(jTextField5.getText()));
+        worker.setFine(Integer.parseInt(jTextField6.getText()));
+        worker.setError(Integer.parseInt(jTextField7.getText()));
+        worker.setTip_oplata(jComboBox1.getSelectedIndex());
+        worker.setStart_mont(jComboBox2.getSelectedIndex());
+        worker.setStart_yar((int)jSpinner1.getValue());
+        worker.setWork_day((int)jSpinner2.getValue());
+        worker.setDel(jCheckBox1.isSelected()?1:0);
+            
+        result = true;
+        setVisible(false);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        setLocationRelativeTo(null);
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -284,17 +368,15 @@ public class FWorker extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                FWorker dialog = new FWorker(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            FWorker dialog = new FWorker(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
 

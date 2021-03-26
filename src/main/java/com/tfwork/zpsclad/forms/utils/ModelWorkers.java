@@ -30,6 +30,7 @@ public class ModelWorkers extends AbstractTableModel{
         listCol.add("Комнаты");
         listCol.add("Штраф");
         listCol.add("Ошибки");
+        listCol.add("Удален");
     }
 
     List<Worker> list;
@@ -54,11 +55,13 @@ public class ModelWorkers extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        
+            
         switch(columnIndex){
             case 0:
                 return list.get(rowIndex).getKod();
             case 1:
-                return list.get(rowIndex).getTip_oplata()==1?"ОКЛ":( list.get(rowIndex).getTip_oplata()==2?"НАБ":"КОНТ");
+                return list.get(rowIndex).getTip_oplata()==0?"ОКЛ":( list.get(rowIndex).getTip_oplata()==1?"НАБ":"КОНТ");
             case 2:
                 return list.get(rowIndex).getName();
             case 3:
@@ -83,17 +86,23 @@ public class ModelWorkers extends AbstractTableModel{
                 return list.get(rowIndex).getFine();
             case 13:
                 return list.get(rowIndex).getError();           
+            case 14:
+                return list.get(rowIndex).getDel();               
                 
         }
         return null;
     }
     
-    
+    /**
+     * Заполнить таблицу
+     * @param ls 
+     */
     public void setData(List<Worker> ls)            
     {
         list = ls;
         fireTableDataChanged();
     }
+   
     
     
     

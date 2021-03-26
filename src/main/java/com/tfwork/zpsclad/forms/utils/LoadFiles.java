@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import com.tfwork.zpsclad.forms.utils.Worker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -26,6 +27,7 @@ public class LoadFiles {
     }
     
     List<Worker> ls = new ArrayList<>();
+    List<String> errorString = new ArrayList<>();
     
     /**
      * Получить список 
@@ -34,6 +36,11 @@ public class LoadFiles {
     public List<Worker> getListWorker()
     {
         return ls;
+    }
+    
+    public List<String> getErrorString()
+    {
+        return errorString;
     }
     
     /**
@@ -73,6 +80,83 @@ public class LoadFiles {
         
         return true;
     }
+    
+    
+    /**
+     * Загрузить файл с данными из программы смарт
+     * @param file_name - путь к файлу
+     * @return 
+     */
+    public boolean loadFileSmart(String file_name)
+    {        
+        File filehope = new File(file_name);
+                
+        try {
+            if(!Files.isExecutable(filehope.toPath()))           
+                return false;
+            
+            Files.readAllLines(filehope.toPath(), Charset.forName("cp1251"))
+                    .stream()
+                    .skip(1)
+                    .forEach(s-> {
+                        String ss[] = s.split(";");
+                        if (ss.length < 3) {
+                            errorString.add(s);
+                        } else {
+                            String ss1[] = ss[2].split("/");
+                            if (ss1.length < 3) {
+                                errorString.add(s);
+                            } else {
+                                
+                                //для контролера
+                                List<Worker> lw = ls.stream().filter(x -> x.getKod() == getInt(ss1[0])).collect(Collectors.toList());
+                                if(!lw.isEmpty()){ // если есть
+                                    Worker w = lw.get(0);                                    
+                                    w.setControlor_pozic_smart( w.getControlor_pozic_smart() + getInt(ss[1]));
+                                    w.setControlor_standart_smart(w.getControlor_standart_smart() + getInt(ss1[2]));
+                                    //w.setPicker_pozic_smart(w.getPicker_pozic_smart() + getInt(ss[1]));
+                                    //w.setPicker_standart_smart(w.getPicker_standart_smart() + getInt(ss1[2]));                                    
+                                } else { // нового создаем
+                                    Worker ww = new Worker();
+                                    ww.setKod(getInt(ss1[0]));
+                                    ww.setControlor_pozic_smart(getInt(ss[1]));
+                                    ww.setControlor_standart_smart(getInt(ss1[2]));
+                                    ww.setPicker_pozic_smart(0);
+                                    ww.setPicker_standart_smart(0);    
+                                    if(ww.getKod() > 0) 
+                                        ls.add(ww);
+                                }
+                                
+                                // для наборщика
+                                lw = ls.stream().filter(x -> x.getKod() == getInt(ss1[1])).collect(Collectors.toList());
+                                if(!lw.isEmpty()){ // если есть
+                                    Worker w = lw.get(0);                                    
+                                    //w.setControlor_pozic_smart( w.getControlor_pozic_smart() + getInt(ss[1]));
+                                    //w.setControlor_standart_smart(w.getControlor_standart_smart() + getInt(ss1[2]));
+                                    w.setPicker_pozic_smart(w.getPicker_pozic_smart() + getInt(ss[1]));
+                                    w.setPicker_standart_smart(w.getPicker_standart_smart() + getInt(ss1[2]));                                    
+                                } else { // нового создаем
+                                    Worker ww = new Worker();
+                                    ww.setKod(getInt(ss1[1]));
+                                    ww.setControlor_pozic_smart(0);
+                                    ww.setControlor_standart_smart(0);
+                                    ww.setPicker_pozic_smart(getInt(ss[1]));
+                                    ww.setPicker_standart_smart(getInt(ss1[2]));   
+                                    if(ww.getKod() > 0) 
+                                        ls.add(ww);
+                                }
+                    }
+                }
+                    });
+        } catch (IOException ex) {
+            Logger.getLogger(LoadFiles.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
     
     /**
      * Получить значение

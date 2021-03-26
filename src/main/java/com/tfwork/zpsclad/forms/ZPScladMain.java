@@ -10,11 +10,11 @@ import com.tfwork.zpsclad.forms.utils.RWJsonFile;
 import com.google.gson.Gson;
 import com.tfwork.zpsclad.forms.utils.ModelWorkers;
 import com.tfwork.zpsclad.forms.utils.Worker;
+import com.tfwork.zpsclad.forms.utils.WorkExecute;
 import com.tfwork.zpsclad.forms.utils.SetupKoefficient;
+import com.tfwork.zpsclad.forms.utils.SmartDoc;
+import java.awt.Component;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -23,8 +23,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 
 /**
@@ -49,6 +54,7 @@ public class ZPScladMain extends javax.swing.JFrame {
     private boolean WRITE_TO_FILE = false;
     
     ModelWorkers model = new ModelWorkers();
+    
         
     
     /**
@@ -62,9 +68,14 @@ public class ZPScladMain extends javax.swing.JFrame {
 
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        jButton10 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
@@ -100,6 +111,46 @@ public class ZPScladMain extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(jButton1);
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add.png"))); // NOI18N
+        jButton8.setText("Добавить");
+        jButton8.setFocusable(false);
+        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton8);
+
+        jButton9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/application.png"))); // NOI18N
+        jButton9.setText("Изменить");
+        jButton9.setFocusable(false);
+        jButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton9);
+        jToolBar1.add(jSeparator1);
+
+        jButton10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/go.png"))); // NOI18N
+        jButton10.setText("Расчет");
+        jButton10.setFocusable(false);
+        jButton10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton10.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton10);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/document.png"))); // NOI18N
@@ -139,6 +190,7 @@ public class ZPScladMain extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(jButton6);
+        jToolBar1.add(jSeparator2);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/database.png"))); // NOI18N
@@ -161,6 +213,11 @@ public class ZPScladMain extends javax.swing.JFrame {
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton3);
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -176,6 +233,7 @@ public class ZPScladMain extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton7);
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -217,6 +275,7 @@ public class ZPScladMain extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         //загрузим настройки если они есть
         try {            
             File file = new File(FILE_SETUP);
@@ -246,6 +305,8 @@ public class ZPScladMain extends javax.swing.JFrame {
         jTable1.setModel(model);        
         jTable1.setShowGrid(true);                    
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.getColumnModel().getColumn(14).setCellRenderer(jTableRenderer);
+        
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -298,7 +359,17 @@ public class ZPScladMain extends javax.swing.JFrame {
         
         if (JOptionPane.showConfirmDialog(null, "Вы действительно хотите создать новый расчет?", "Вопрос.", JOptionPane.YES_NO_OPTION) == 0) {
             WRITE_TO_FILE = true;
-            listWorker = new ArrayList<>();
+            //listWorker = new ArrayList<>();
+            listWorker.stream().forEach(x->{
+                x.setControlor_pozic_hope(0);
+                x.setControlor_pozic_smart(0);
+                x.setControlor_standart_smart(0);
+                x.setControlor_standart_hope(0);
+                x.setPicker_pozic_hope(0);
+                x.setPicker_pozic_smart(0);
+                x.setPicker_standart_hope(0);
+                x.setPicker_standart_smart(0);                
+            });
         }
         
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -319,29 +390,48 @@ public class ZPScladMain extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         if (JOptionPane.showConfirmDialog(null, "Вы действительно хотите сохранить расчет в файл?", "Вопрос.", JOptionPane.YES_NO_OPTION) == 0) {
-            Gson gson = new Gson();
-            try (FileWriter filew = new FileWriter("d:\\file.txt")) {
+            JFileChooser jfipeopen = new JFileChooser();
+            if(jfipeopen.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+            
+                RWJsonFile rwj = new RWJsonFile();
+                rwj.writeSetupToFile(jfipeopen.getSelectedFile().getAbsolutePath() , setupKoefficient, listWorker);
+            
+            /*Gson gson = new Gson();
+            try (FileWriter filew = new FileWriter(jfipeopen.getSelectedFile())) {
                 gson.toJson(setupKoefficient, filew);
                 filew.write("\n");
                 setupKoefficient.setWork_mont(2023);
                 gson.toJson(setupKoefficient, filew);
             } catch (IOException ex) {
                 Logger.getLogger(JSetupKoeff.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
             }
-            
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try {
-            // TODO add your handling code here:
-            File file = new File("d:\\file.txt");
-            List<String> ls = Files.readAllLines(file.toPath());
-            Gson gson = new Gson();
-            setupKoefficient = gson.fromJson(ls.get(0), SetupKoefficient.class);
-        } catch (IOException ex) {
-            Logger.getLogger(ZPScladMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        if (JOptionPane.showConfirmDialog(null, "Вы действительно хотите загрузить расчет из файла?", "Вопрос.", JOptionPane.YES_NO_OPTION) == 0) {
+            JFileChooser jfipeopen = new JFileChooser();
+            if (jfipeopen.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    //если файл есть
+                    List<String> ls = Files.readAllLines(jfipeopen.getSelectedFile().toPath(), Charset.forName("cp1251"));
+                    Gson gson = new Gson();
+                    // настройки коэффициентов
+                    setupKoefficient = gson.fromJson(ls.get(0), SetupKoefficient.class);
+                    listWorker.clear();
+                    
+                    ls.stream().skip(1).forEach(x -> {
+                        listWorker.add(gson.fromJson(x, Worker.class));
+                    });
+                    model.setData(listWorker);
+                    WRITE_TO_FILE = true;
+                } catch (IOException ex) {
+                    Logger.getLogger(ZPScladMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -357,7 +447,7 @@ public class ZPScladMain extends javax.swing.JFrame {
     private void jTable1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jTable1ComponentResized
         // TODO add your handling code here:
         if(jTable1.getRowCount()>0){
-            int h = jTable1.getWidth()-840;
+            int h = jTable1.getWidth()-870;
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(50);
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(h);
@@ -372,8 +462,91 @@ public class ZPScladMain extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(11).setPreferredWidth(60);
             jTable1.getColumnModel().getColumn(12).setPreferredWidth(60);
             jTable1.getColumnModel().getColumn(13).setPreferredWidth(60);
+            jTable1.getColumnModel().getColumn(14).setPreferredWidth(30);
         }
     }//GEN-LAST:event_jTable1ComponentResized
+
+    /**
+     * Изменить работника
+     * @param evt 
+     */
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        int h = jTable1.getSelectedRow();
+        if(h==-1)return;
+        final int h1 = (int)jTable1.getValueAt(h, 0);
+        //listWorker.stream().filter(x->{return x.getKod()==h1;}).collect(Collectors.toList()).get(0);
+        FWorker fw = new FWorker(null, true);
+        fw.setWorker(listWorker.stream().filter(x->{return x.getKod()==h1;}).collect(Collectors.toList()).get(0));
+        fw.setVisible(true);
+        if(fw.getResult()){
+            model.setData(listWorker);
+            WRITE_TO_FILE = true;
+        }
+        
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        FWorker fw = new FWorker(null, true);
+        fw.createNewWorker();
+        fw.setVisible(true);
+        if(fw.getResult()){
+            listWorker.add(fw.getWorker());
+            model.setData(listWorker);
+            WRITE_TO_FILE = true;
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    /**
+     * Загрузка файла программы смарт
+     * @param evt 
+     */
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        List<SmartDoc> lsSD = new ArrayList();
+        String ss[];
+        
+        JFileChooser jfipeopen = new JFileChooser();
+        if(jfipeopen.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+            LoadFiles loadfiles = new LoadFiles();
+            if(loadfiles.loadFileSmart(jfipeopen.getSelectedFile().getAbsolutePath())){              
+                
+                JOptionPane.showMessageDialog(null, "Ошибочные строки " + System.lineSeparator() + loadfiles.getErrorString().stream().collect(Collectors.joining(System.lineSeparator())));                
+                
+                if (!loadfiles.getErrorString().isEmpty()) {
+                    if (JOptionPane.showConfirmDialog(null, "Документ загружен с ошибками. Применить изменения?", "Вопрос", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
+                WRITE_TO_FILE = true;
+                loadfiles.getListWorker().stream().forEach(s->{                    
+                    //ss = s.s
+                    List<Worker> lw = listWorker.stream().filter(x -> x.getKod()== s.getKod()).collect(Collectors.toList());
+                    //если элемент есть
+                    if(!lw.isEmpty()){
+                        lw.get(0).setControlor_pozic_smart(s.getControlor_pozic_smart());
+                        lw.get(0).setControlor_standart_smart(s.getControlor_standart_smart());
+                        lw.get(0).setPicker_pozic_smart(s.getPicker_pozic_smart());
+                        lw.get(0).setPicker_standart_smart(s.getPicker_standart_smart());
+                        //lw.get(0).setName(s.getName());
+                    }else{
+                        listWorker.add(s);
+                    }
+                });
+                //listWorker.forEach(s -> System.out.println(s.toString()));
+            }                
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * Рассчитать 
+     * @param evt 
+     */
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        //WorkExecute we        
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -391,15 +564,11 @@ public class ZPScladMain extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ZPScladMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ZPScladMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ZPScladMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ZPScladMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the form */
@@ -410,16 +579,50 @@ public class ZPScladMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
-   
+    
+ 
+        // подсветка и картинки в таблицу                       
+    
+    final ImageIcon dels = new ImageIcon(getClass().getResource("/remove.png"));
+    
+    
+    
+
+    public final DefaultTableCellRenderer jTableRenderer = new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);            
+            if (column == 14) {
+                switch (Integer.parseInt(cell.getText())) {
+                    case 0:
+                        cell.setIcon(null);
+                        cell.setText("");                        
+                        break;
+                    case 1:
+                        cell.setIcon(dels);
+                        cell.setText("");
+                        break;                    
+                }
+            }
+            return cell;
+        }
+
+    };
 }
