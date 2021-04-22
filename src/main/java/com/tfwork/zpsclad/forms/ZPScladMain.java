@@ -512,13 +512,34 @@ public class ZPScladMain extends javax.swing.JFrame {
             LoadFiles loadfiles = new LoadFiles();
             if(loadfiles.loadFileSmart(jfipeopen.getSelectedFile().getAbsolutePath())){              
                 
-                JOptionPane.showMessageDialog(null, "Ошибочные строки " + System.lineSeparator() + loadfiles.getErrorString().stream().collect(Collectors.joining(System.lineSeparator())));                
+                if(loadfiles.getErrorString().size()>0){
+                    JOptionPane.showMessageDialog(null, "Ошибочные строки " + loadfiles.getErrorString().size() + "  "  + System.lineSeparator() + loadfiles.getErrorString().stream().collect(Collectors.joining(System.lineSeparator())));                
+                    loadfiles.getErrorString().stream().forEach(x->{ System.out.println(x); });
+                }
                 
                 if (!loadfiles.getErrorString().isEmpty()) {
                     if (JOptionPane.showConfirmDialog(null, "Документ загружен с ошибками. Применить изменения?", "Вопрос", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                         return;
                     }
-                }
+                }                
+                
+                System.out.println("->" + "код" + ";" + 
+                        "контролер позиций" + ";" +   
+                        "контролер стандарт" + ";" +   
+                        "наборщик позиций" + ";" +   
+                        "наборщик стандарт"
+                        );
+                
+                
+                loadfiles.getListWorker().stream().forEach(s->{ System.out.println("->" + s.getKod() + ";" + 
+                        s.getControlor_pozic_smart() + ";" +   
+                        s.getControlor_standart_smart() + ";" +   
+                        s.getPicker_pozic_smart() + ";" +   
+                        s.getPicker_standart_smart()
+                        );
+                });
+                
+                
                 WRITE_TO_FILE = true;
                 loadfiles.getListWorker().stream().forEach(s->{                    
                     //ss = s.s
